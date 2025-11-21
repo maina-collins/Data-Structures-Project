@@ -133,10 +133,9 @@ http://localhost/jumia_clone/
 
 ---
 
-## 📝 License
-Academic project for educational use only.
-
----
-
 ## 🤝 Contributors
-- **Maina Collins** – Developer
+- **Collins Ng'ang'a Maina** 
+-**Timothy Kibet Rono**
+-**Geoffrey Njenga Wanene**
+-**Ian Kibiwott**
+-**Kevin Simitia Tande**
