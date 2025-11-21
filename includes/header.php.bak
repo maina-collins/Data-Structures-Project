@@ -1,0 +1,29 @@
+<?php if(session_status() === PHP_SESSION_NONE) session_start(); ?>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Jumia Clone</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1><a href="/index.php">Jumia Clone</a></h1>
+      <nav>
+        <a href="/index.php">Home</a> |
+        <a href="/products.php">Shop</a> | <a href="/view_cart.php">Cart</a> |
+        <?php if(isset($_SESSION['user'])): ?>
+          <a href="/profile.php">Profile</a> | 
+          <span>Hi, <?=htmlspecialchars($_SESSION['user']['username'])?></span> |
+          <a href="/logout.php">Logout</a>
+          <?php if($_SESSION['user']['role']=='admin'): ?> | <a href="/admin/dashboard.php">Admin</a><?php endif; ?>
+        <?php else: ?>
+          <a href="/login.php">Login</a> |
+          <a href="/register.php">Register</a>
+        <?php endif; ?>
+      </nav>
+    </div>
+  </header>
+  <main class="container">

@@ -1,0 +1,53 @@
+<?php
+require_once __DIR__.'/includes/db.php';
+require_once __DIR__.'/includes/header.php';
+
+$search = $_GET['search'] ?? '';
+$page = max(1, intval($_GET['page'] ?? 1));
+$limit = 6;
+$offset = ($page - 1) * $limit;
+
+$where = '';
+$params = [];
+
+if ($search) {
+    $where = "WHERE name LIKE ?";
+    $params[] = "%$search%";
+}
+
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM products $where");
+$stmt->execute($params);
+$total = $stmt->fetchColumn();
+$pages = ceil($total / $limit);
+
+$sql = "SELECT * FROM products $where LIMIT $limit OFFSET $offset";
+$stmt = $pdo->prepare($sql);
+$stmt.execute($params);
+$products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+<h2>Products</h2>
+
+<form method="get">
+  <input type="text" name="search" value="<?=htmlspecialchars($search)?>" placeholder="Search products...">
+  <button type="submit">Search</button>
+</form>
+
+<div class="grid">
+<?php foreach($products as $p): ?>
+  <div class="card">
+    <a href="/product.php?id=<?=$p['id']?>">
+      <img src="<?= $p['image'] ? '/uploads/'.htmlspecialchars($p['image']) : '/assets/images/placeholder.png' ?>">
+      <h3><?=htmlspecialchars($p['name'])?></h3>
+      <p class="price">$<?=number_format($p['price'],2)?></p>
+    </a>
+  </div>
+<?php endforeach; ?>
+</div>
+
+<div class="pagination">
+<?php for($i=1;$i<=$pages;$i++): ?>
+  <a href="?search=<?=urlencode($search)?>&page=<?=$i?>" class="<?= $i==$page?'active':'' ?>"><?=$i?></a>
+<?php endfor; ?>
+</div>
+
+<?php require_once __DIR__.'/includes/footer.php'; ?>
